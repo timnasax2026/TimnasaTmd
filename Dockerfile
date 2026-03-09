@@ -1,13 +1,20 @@
-FROM node:lts-buster
+FROM node:18-slim
 
-RUN apt-get update && \
-  apt-get install -y ffmpeg imagemagick webp && \
-  apt-get upgrade -y && \
-  rm -rf /var/lib/apt/lists/*
+# Install pekee ffmpeg na mahitaji madogo bila kufanya upgrade nzito
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    imagemagick \
+    webp \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY package.json .
-RUN npm install
-COPY . .
-CMD ["node", "index.js"]
 
+# Copy package files kwanza kwa ajili ya speed
+COPY package*.json ./
+RUN npm install
+
+# Copy files nyingine zote
+COPY . .
+
+# Amri ya kuanza bot
+CMD ["node", "index.js"]
