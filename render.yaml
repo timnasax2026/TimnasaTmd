@@ -1,1 +1,7 @@
 
+services:
+  - type: worker
+    name: timnasa-tmd-bot
+    env: docker
+    plan: free
+    region: oregon
