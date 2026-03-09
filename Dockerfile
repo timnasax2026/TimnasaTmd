@@ -1,20 +1,17 @@
 FROM node:18-slim
 
-# Install pekee ffmpeg na mahitaji madogo bila kufanya upgrade nzito
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    imagemagick \
-    webp \
-    && rm -rf /var/lib/apt/lists/*
+# Sakinisha ffmpeg pekee, bila upgrade ya OS kuzuia error 100
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy package files kwanza kwa ajili ya speed
-COPY package*.json ./
-RUN npm install
+# Copy package files
+COPY package.json .
 
-# Copy files nyingine zote
+# Kulazimisha installation hata kama kuna migongano (Inatatua error 254)
+RUN npm install --quiet --no-progress --legacy-peer-deps
+
 COPY . .
 
-# Amri ya kuanza bot
+# Amri ya kuanza
 CMD ["node", "index.js"]
